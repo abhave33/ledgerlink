@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package ledger;
+option go_package = "github.com/<your-username>/ledgerlink/go/proto/ledger;ledgerpb";
+
+message Money {
+  string currency = 1;
+  int64 amount_cents = 2;
+}
+
+message AuthorizationRequest {
+  string transaction_id = 1;
+  string account_id = 2;
+  Money amount = 3;
+}
+
+message AuthorizationResponse {
+  bool approved = 1;
+  string reason = 2;
+}
+
+message CaptureRequest {
+  string transaction_id = 1;
+  string account_id = 2;
+  Money amount = 3;
+}
+
+message CaptureResponse {
+  bool success = 1;
+  string reason = 2;
+}
+
+message SettlementRequest {
+  string transaction_id = 1;
+  string account_id = 2;
+  Money amount = 3;
+}
+
+message SettlementResponse {
+  bool success = 1;
+  string reason = 2;
+}
+
+message GetAccountRequest {
+  string account_id = 1;
+}
+
+message GetAccountResponse {
+  string account_id = 1;
+  Money balance = 2;
+  Money held = 3;
+}
+
+service LedgerService {
+  rpc Authorize(AuthorizationRequest) returns (AuthorizationResponse);
+  rpc Capture(CaptureRequest) returns (CaptureResponse);
+  rpc Settle(SettlementRequest) returns (SettlementResponse);
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse);
+}
